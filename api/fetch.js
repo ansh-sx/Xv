@@ -2,24 +2,21 @@ import axios from 'axios';
 import cheerio from 'cheerio';
 
 export default async function handler(req, res) {
-    const query = req.query.query || ''; // Default to empty search if no query
-    const url = `https://www.xvideos.com/?k=${query}`; // Xvideos search URL
+    const query = req.query.query || '';
+    const url = `https://spankbang.com/s/${query}`; // SpankBang search URL
 
     try {
-        // Fetch the HTML of the page
         const { data } = await axios.get(url);
-        const $ = cheerio.load(data); // Load HTML into cheerio parser
+        const $ = cheerio.load(data);
 
-        // Array to hold video details
-        let videoList = [];
+        const videoList = [];
 
-        // Select video blocks from the Xvideos page
-        $('.thumb-block').each((index, element) => {
-            const title = $(element).find('.thumb-under h3 a').text().trim();
-            const embedUrl = 'https://www.xvideos.com' + $(element).find('a').attr('href');
-            const thumbnail = $(element).find('.thumb img').attr('data-src');
+        // SpankBang video selector (structure may differ based on site changes)
+        $('.video-item').each((index, element) => {
+            const title = $(element).find('.title').text().trim();
+            const embedUrl = 'https://spankbang.com' + $(element).find('a').attr('href');
+            const thumbnail = $(element).find('.thumb').attr('src');
 
-            // Push each video’s data into videoList array
             videoList.push({
                 title,
                 embedUrl,
@@ -27,10 +24,9 @@ export default async function handler(req, res) {
             });
         });
 
-        // Send JSON response containing scraped video data
         res.status(200).json(videoList);
     } catch (error) {
-        console.error('Error fetching videos:', error);
-        res.status(500).json({ error: 'Failed to fetch data from Xvideos' });
+        console.error('Error fetching videos from SpankBang:', error);
+        res.status(500).json({ error: 'Failed to fetch data from SpankBang' });
     }
 }
