@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
 from bs4 import BeautifulSoup
+import urllib.parse
 
 app = Flask(__name__)
 
@@ -33,6 +34,14 @@ def scrape():
             results[url] = content
 
     return jsonify(results)
+
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('q')
+    if query:
+        google_url = f"https://www.google.com/search?q={urllib.parse.quote(query)}"
+        return jsonify({"search_url": google_url})
+    return jsonify({"error": "No search query provided."}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)
