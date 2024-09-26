@@ -1,6 +1,6 @@
 {
   "builds": [
-    { "src": "src/index.tsx", "use": "@vercel/node" }
+    { "src": "src/app.tsx", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/" }
