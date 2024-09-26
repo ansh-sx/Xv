@@ -1,12 +1,11 @@
-// src/index.tsx
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+'use client'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import UltimateDictionaryApp from '@/components/UltimateDictionaryApp'
+
+export default function Home() {
+  return (
+    <div>
+      <UltimateDictionaryApp />
+    </div>
+  )
+}
